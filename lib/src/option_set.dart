@@ -1,3 +1,5 @@
+import 'package:option_set/option_set.dart';
+
 /// A wrapper around an integer bitmask used to implement a set of options (i
 /// .e. an Option Set).
 ///
@@ -155,7 +157,7 @@ class OptionSet<T> {
   // when testing for equality.
   @override
   bool operator ==(other) =>
-      this.runtimeType == other.runtimeType && this.rawValue == other.rawValue;
+      other is OptionSet && this.runtimeType == other.runtimeType && this.rawValue == other.rawValue;
 
   @override
   int get hashCode => this.runtimeType.hashCode + this.rawValue;

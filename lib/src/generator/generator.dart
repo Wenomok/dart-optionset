@@ -9,14 +9,14 @@ import 'annotation.dart';
 
 class OptionSetGenerator extends GeneratorForAnnotation<Option_Set> {
   @override
-  String generateForAnnotatedElement(
+  String? generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
     // Enum is read as ClassElement
     if (element is ClassElement) {
       // Extract user info from annotation.
       final String name = annotation.read('name').stringValue;
       final Map<DartObject, DartObject> compound =
-          annotation.read('compound').mapValue;
+          annotation.read('compound').mapValue as Map<DartObject, DartObject>;
       final bool includeNone = annotation.read('includeNone').boolValue;
       final bool includeAll = annotation.read('includeAll').boolValue;
 
@@ -38,7 +38,7 @@ class OptionSetGenerator extends GeneratorForAnnotation<Option_Set> {
           options.map<String>((Field field) => field.name).toList();
 
       // .none
-      Field noneOption;
+      Field? noneOption;
       if (includeNone) {
         noneOption = optionField('none', 'const $className._(0)');
       }
@@ -47,8 +47,8 @@ class OptionSetGenerator extends GeneratorForAnnotation<Option_Set> {
       List<Field> compoundOptions = [];
       if (compound.isNotEmpty) {
         compound.forEach((DartObject key, DartObject value) {
-          String compoundOptionName = key.toStringValue();
-          List<DartObject> singleOptions = value.toListValue();
+          String compoundOptionName = key.toStringValue()!;
+          List<DartObject> singleOptions = value.toListValue()!;
 
           // Extract names of single options from list of enum values.
           List<String> singleOptionNames =
@@ -71,7 +71,7 @@ class OptionSetGenerator extends GeneratorForAnnotation<Option_Set> {
       }
 
       // .all
-      Field allOption;
+      Field? allOption;
       if (includeAll) {
         String _allOptionsAssignment = optionNames.join(' & ');
         allOption = optionField('all', _allOptionsAssignment);
